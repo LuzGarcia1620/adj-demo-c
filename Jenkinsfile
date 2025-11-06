@@ -1,53 +1,55 @@
-pipeline{
+pipeline {
     agent any
-    stages{
-        //primera etapa pa parar todos los servicios
-        stage('Deteniendo los servicios'){
-            steps{
-                sh '''
-                    docker compose -p adj-demo-c down || true
-                '''
+
+    stages {
+        // Etapa para parar tdos los servicios
+        stage('Parando los servicios') {
+            steps {
+                script {
+                    echo 'Deteniendo contenedores (Windows)...'
+                    // En Windows con shell cmd, usar || exit 0 para evitar fallo si no hay contenedores
+                    bat 'docker compose -p jcgr-demo down || exit 0'
+                }
             }
         }
-        //eliminar
-        stage('Eliminando Imagenes antañas'){
-            steps{
-                sh '''
-                    IMAGES=$(docker images --filter "label=com.docker.compose.project=adj-demo-c" -q)
-                    if[-n '$IMAGES']; then
-                    docker images rmi $IMAGES
-                else
-                    echo 'no hay imagenes pa borrar'
-                fi
-                '''
+
+        // Elimianr las imagenes anteriores  
+        stage('Borrando imagenes antiguas') {
+            steps {
+                script {
+                    echo 'Eliminando imagenes antiguas...'
+                    bat 'IMAGES=$(docker images -q jcgr-demo) && if not "%IMAGES%"=="" (docker rmi -f %IMAGES%)'
+                }
             }
         }
-        //bajar actualizacion
-        stage('Actuyalizando...'){
-            steps{
+
+        // Bajar la ctualizacion mas reciente
+        stage('Actualizando..') {
+            steps {
                 checkout scm
             }
-        //levantar y desplegar
-        stage('Construyendo y desplegando...'){
-            steps{
-                sh '''
-                    docker compose up --build -d
-                '''
+        }
+
+        //Levantar y despegar el proyecto
+        stage('Levantando los servicios') {
+            steps {
+                script {
+                    echo 'Levantando contenedores...'
+                    bat 'docker compose -p jcgr-demo up -d --build'
+                }
             }
         }
     }
 
-    post{
-        success{
-            echo 'Pipeline ejecutado bien'
+    post {
+        always {
+            echo 'Pipeline finalizado.'
         }
-
-        failure{
-            echo 'error al ejecutar al Pipeline'
+        success {
+            echo 'Pipeline ejecutado exitosamente.'
         }
-
-        always{
-            echo 'Pipeline finalizado'
+        failure {
+            echo 'Error al ejecutar el pipeline.'
         }
     }
 }
