@@ -18,7 +18,7 @@ pipeline {
             steps {
                 script {
                     echo 'Eliminando imagenes antiguas...'
-                    bat 'IMAGES=$(docker images -q jcgr-demo) && if not "%IMAGES%"=="" (docker rmi -f %IMAGES%)'
+                    bat 'IMAGES=$(docker images -q adj-demo-c) && if not "%IMAGES%"=="" (docker rmi -f %IMAGES%)'
                 }
             }
         }
@@ -35,7 +35,7 @@ pipeline {
             steps {
                 script {
                     echo 'Levantando contenedores...'
-                    bat 'docker compose -p jcgr-demo up -d --build'
+                    bat 'docker compose -p adj-demo-c up -d --build'
                 }
             }
         }
