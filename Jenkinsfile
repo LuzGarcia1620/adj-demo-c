@@ -8,7 +8,7 @@ pipeline {
                 script {
                     echo 'Deteniendo contenedores (Windows)...'
                     // En Windows con shell cmd, usar || exit 0 para evitar fallo si no hay contenedores
-                    bat 'docker compose -p jcgr-demo down || exit 0'
+                    bat 'docker compose -p adj-demo-c down || exit 0'
                 }
             }
         }
