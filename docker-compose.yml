@@ -19,7 +19,7 @@ services:
       context: ./client
       args:
         API_HOST: localhost
-        API_PORT: 8080
+        API_PORT: 8081
         API_BASE: /adj-api
     container_name: adj-client
     ports:

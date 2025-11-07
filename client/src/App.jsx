@@ -6,7 +6,7 @@ function App() {
     <>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="container-fluid">
-          <a href="" className="navbar-brand">JCGR-Demo</a>
+          <a href="" className="navbar-brand">Adj-Demo-c</a>
           <div className="collapse navbar-collapse">
             <ul className="navbar-nav">
               <li className="nav-item">
